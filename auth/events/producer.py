@@ -10,7 +10,6 @@ class Producer:
             bootstrap_servers="broker:9092",
             value_serializer=lambda v: json.dumps(v).encode("utf-8"),
         )
-        KafkaConsumer("account", bootstrap_servers="broker:9092")
 
     def call(self, event, topic):
         logger.info(f"Send event with data {event} in topic: {topic}")

@@ -44,6 +44,16 @@ services:
       - 8883:8883
     environment:
       - DEBUG=1
+  inventory-consumer:
+    build: ./inventory
+    container_name: ates_inventory_consumer
+    command: python3 inventory/consumer.py
+    volumes:
+      - ./:/inventory
+    networks:
+      - ates
+    environment:
+      - DEBUG=1
   zookeeper:
     image: confluentinc/cp-zookeeper:5.4.1
     hostname: zookeeper

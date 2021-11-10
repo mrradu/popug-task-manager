@@ -14,6 +14,8 @@ passlib = {extras = ["bcrypt"], version = "*"}
 sqlalchemy = "*"
 loguru = "*"
 kafka-python = "*"
+aiokafka = "*"
+aiojobs = "*"
 
 [dev-packages]
 
