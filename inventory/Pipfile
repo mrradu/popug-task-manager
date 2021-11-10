@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+cffi = "*"
+pydantic = "*"
+uvicorn = "*"
+python-multipart = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
+sqlalchemy = "*"
+loguru = "*"
+kafka-python = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
