@@ -11,6 +11,8 @@ python-multipart = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 passlib = {extras = ["bcrypt"], version = "*"}
 sqlalchemy = "*"
+aiokafka = "*"
+aiojobs = "*"
 
 [dev-packages]
 

@@ -3,7 +3,6 @@ import asyncio
 import aiojobs
 from json import loads
 from aiokafka import AIOKafkaConsumer
-from inventory.consumer_handler.performers import *
 from inventory.consumer_handler.handler import event_handler
 
 
@@ -59,7 +58,7 @@ async def consume_cud():
                 msg.timestamp,
             )
             print("process event")
-            event_handler.process_event(Event(**msg.value))
+            event_handler.process_event(msg.value)
     except asyncio.exceptions.CancelledError:
         print("CUD events consumer: Good bye!")
     finally:

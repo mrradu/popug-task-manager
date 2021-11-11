@@ -7,7 +7,7 @@ def send_update_user_role_event(user):
         "event_name": "AccountRoleChanged",
         "data": {
             "public_id": user.public_id,
-            "role": user.role,
+            "role": user.role.value,
         },
     }
     Producer().call(event, "accounts")
