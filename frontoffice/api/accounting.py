@@ -24,7 +24,6 @@ async def get_current_user(request: Request):
         user = auth_gateway.check_auth_user(request.cookies)
     except Exception:
         raise RequiresLoginException()
-    print(user)
     return user.dict()
 
 
@@ -61,7 +60,6 @@ def sign_up_form(
 def sign_up(request: Request):
     try:
         user = auth_gateway.check_auth_user(request.cookies)
-        print(user)
         return RedirectResponse("/")
     except:
         return templates.TemplateResponse("sign_in.html", {"request": request})

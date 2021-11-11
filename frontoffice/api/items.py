@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form
+from starlette import status
 from starlette.requests import Request
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, RedirectResponse
 
 from frontoffice.api.accounting import get_current_user
 from frontoffice.gateway.items import item_gateway
@@ -15,3 +16,15 @@ def get_items(request: Request, current_user=Depends(get_current_user)):
     return templates.TemplateResponse(
         "tasks.html", {"request": request, "tasks": tasks, "current_user": current_user}
     )
+
+
+@router.post("/add", response_class=HTMLResponse)
+def add_task(
+    request: Request,
+    task_title: str = Form(...),
+    task_description: str = Form(...),
+    current_user=Depends(get_current_user),
+):
+    item_gateway.add_tasks(task_title, task_description)
+
+    return RedirectResponse("/items", status_code=status.HTTP_303_SEE_OTHER)

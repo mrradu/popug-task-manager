@@ -37,7 +37,6 @@ class AuthGateway:
 
     def check_auth_user(self, cookies):
         logger.info("Check user authentication")
-        print(cookies)
         response = requests.get(
             f"{self.AUTH_HOST}/auth/me",
             headers={"Authorization": cookies["Authorization"]},

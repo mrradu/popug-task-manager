@@ -47,13 +47,16 @@ services:
   inventory-consumer:
     build: ./inventory
     container_name: ates_inventory_consumer
-    command: python consumer.py
+    command: python -m inventory.consumer
     volumes:
       - ./:/inventory
     networks:
       - ates
-#    environment:
-#      - DEBUG=1
+    environment:
+      - DEBUG=1
+    depends_on:
+      - broker
+      - zookeeper
   zookeeper:
     image: confluentinc/cp-zookeeper:5.4.1
     hostname: zookeeper
@@ -65,7 +68,6 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-
   broker:
     image: confluentinc/cp-server:5.4.1
     hostname: broker

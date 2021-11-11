@@ -1,0 +1,16 @@
+<div class="card my-5" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title m-2">Добавить новую задачу</h5>
+        <form action="/add"  method="post">
+            <div class="form-row d-flex">
+                <div class="col mx-2">
+                    <input type="text" class="form-control" id="task_title" name="task_title" placeholder="Название задачи" required>
+                </div>
+                <div class="col mx-2">
+                    <input type="text" class="form-control" id="task_description" name="task_description"  placeholder="Описание" required>
+                </div>
+              <button type="submit" class="btn btn-primary">Создать таску</button>
+            </div>
+        </form>
+    </div>
+</div>
