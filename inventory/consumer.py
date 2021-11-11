@@ -1,25 +1,33 @@
 import asyncio
+from json import loads
 
 import aiojobs
-from json import loads
 from aiokafka import AIOKafkaConsumer
 
 
 async def consume_be():
     consumer = AIOKafkaConsumer(
-        'accounts',
-        bootstrap_servers='broker:9092',
-        group_id="my-group", value_deserializer=lambda x: loads(x.decode('utf-8')))
+        "accounts",
+        bootstrap_servers="broker:9092",
+        value_deserializer=lambda x: loads(x.decode("utf-8")),
+    )
     # Get cluster layout and join group `my-group`
     await consumer.start()
     try:
-        print('Run consumer for business events')
+        print("Run consumer for business events")
         # Consume messages
         async for msg in consumer:
-            print("consumed: ", msg.topic, msg.partition, msg.offset,
-                  msg.key, msg.value, msg.timestamp)
+            print(
+                "consumed: ",
+                msg.topic,
+                msg.partition,
+                msg.offset,
+                msg.key,
+                msg.value,
+                msg.timestamp,
+            )
     except asyncio.exceptions.CancelledError:
-        print('Business events consumer: Good bye!')
+        print("Business events consumer: Good bye!")
     finally:
         # Will leave consumer group; perform autocommit if enabled.
         await consumer.stop()
@@ -27,19 +35,28 @@ async def consume_be():
 
 async def consume_cud():
     consumer = AIOKafkaConsumer(
-        'accounts-stream',
-        bootstrap_servers='broker:9092',
-        group_id="my-group", value_deserializer=lambda x: loads(x.decode('utf-8')))
+        "accounts-stream",
+        bootstrap_servers="broker:9092",
+        group_id="my-group",
+        value_deserializer=lambda x: loads(x.decode("utf-8")),
+    )
     # Get cluster layout and join group `my-group`
     await consumer.start()
     try:
-        print('Run consumer for CUD events')
+        print("Run consumer for CUD events")
         # Consume messages
         async for msg in consumer:
-            print("consumed: ", msg.topic, msg.partition, msg.offset,
-                  msg.key, msg.value, msg.timestamp)
+            print(
+                "consumed: ",
+                msg.topic,
+                msg.partition,
+                msg.offset,
+                msg.key,
+                msg.value,
+                msg.timestamp,
+            )
     except asyncio.exceptions.CancelledError:
-        print('CUD events consumer: Good bye!')
+        print("CUD events consumer: Good bye!")
     finally:
         # Will leave consumer group; perform autocommit if enabled.
         await consumer.stop()
@@ -54,14 +71,13 @@ async def main():
     return scheduler
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
-    print('Run event consumers')
+    print("Run event consumers")
 
     try:
         scheduler = loop.run_until_complete(main())
         loop.run_forever()
     except KeyboardInterrupt:
         loop.run_until_complete(scheduler.close())
-

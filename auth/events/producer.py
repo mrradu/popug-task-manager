@@ -1,13 +1,14 @@
 import json
 
+from kafka import KafkaConsumer, KafkaProducer
 from loguru import logger
-from kafka import KafkaProducer, KafkaConsumer
 
 
 class Producer:
     def __init__(self):
         self.producer = KafkaProducer(
             bootstrap_servers="broker:9092",
+            api_version=(0, 11, 5),
             value_serializer=lambda v: json.dumps(v).encode("utf-8"),
         )
 
