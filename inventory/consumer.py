@@ -5,6 +5,7 @@ from json import loads
 
 import aiojobs
 from aiokafka import AIOKafkaConsumer
+from kafka.errors import KafkaConnectionError
 from loguru import logger
 
 from inventory.consumer_handler.performers import *
@@ -20,7 +21,12 @@ def attach_consumer(topic: str, group_id: str = 'my-group'):
                 value_deserializer=lambda x: loads(x.decode("utf-8")),
             )
 
-            await consumer.start()
+            while True:
+                try:
+                    await consumer.start()
+                    break
+                except KafkaConnectionError:
+                    await asyncio.sleep(5)
 
             try:
                 logger.info(f"Run event consumer for topic `{topic}`")
