@@ -41,6 +41,8 @@ class AuthGateway:
             f"{self.AUTH_HOST}/auth/me",
             headers={"Authorization": cookies["Authorization"]},
         )
+        print(response.json())
+        print(User(**response.json()))
 
         try:
             return User(**response.json())
@@ -49,7 +51,7 @@ class AuthGateway:
 
     def auth_user(self, email, password):
         response = requests.post(
-            f"{self.AUTH_HOST}/auth/token",
+            f"{self.AUTH_HOST}/auth/login",
             data={"username": email, "password": password},
         )
 

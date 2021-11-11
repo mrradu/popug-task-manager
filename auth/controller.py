@@ -27,6 +27,14 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.UserModel).filter(models.UserModel.email == email).first()
 
 
+def get_user_by_public_id(db: Session, public_id: str):
+    return (
+        db.query(models.UserModel)
+        .filter(models.UserModel.public_id == public_id)
+        .first()
+    )
+
+
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     """Получение списка юзера."""
     logger.info(f"Get all users")

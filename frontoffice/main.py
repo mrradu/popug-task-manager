@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from loguru import logger
 from requests import Request
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse, Response
@@ -20,4 +21,5 @@ app.add_middleware(
 
 @app.exception_handler(RequiresLoginException)
 async def exception_handler(request: Request, exc: RequiresLoginException) -> Response:
+    logger.info("Auth error. Redirect to sign_in page")
     return RedirectResponse("/sign_in")

@@ -1,6 +1,15 @@
 import uuid
 
-from sqlalchemy import Column, Enum, ForeignKey, Integer, String, TIMESTAMP, sql
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Enum,
+    ForeignKey,
+    Integer,
+    String,
+    TIMESTAMP,
+    sql,
+)
 
 from inventory.db import Base
 from inventory.enums import ItemsStatus, UserRole
@@ -33,6 +42,7 @@ class AccountsModel(Base):
     full_name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     role = Column(Enum(UserRole), nullable=False, default=UserRole.EMPLOYEE)
+    is_active = Column(Boolean, default=True)
 
 
 class AuthIdentities(Base):

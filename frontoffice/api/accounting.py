@@ -3,9 +3,11 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends, Form
 from fastapi.responses import HTMLResponse
 from loguru import logger
+from pydantic import BaseModel
 from starlette import status
 from starlette.responses import RedirectResponse
 
+from frontoffice.controller import get_user
 from frontoffice.exeption import RequiresLoginException
 from frontoffice.gateway.auth import auth_gateway
 from frontoffice.templates import templates
@@ -22,6 +24,7 @@ async def redirect() -> bool:
 async def get_current_user(request: Request):
     try:
         user = auth_gateway.check_auth_user(request.cookies)
+        # user = get_user(request.cookies) # TODO когда обрабатывать юзера в fo, то надо будет брать юзера из БД fo.
     except Exception:
         raise RequiresLoginException()
     return user.dict()

@@ -58,6 +58,7 @@ async def consume_cud():
                 msg.value,
                 msg.timestamp,
             )
+            event_handler.process_event(Event(**msg.value))
     except asyncio.exceptions.CancelledError:
         print("CUD events consumer: Good bye!")
     finally:
