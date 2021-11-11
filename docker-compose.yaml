@@ -51,10 +51,14 @@ services:
     networks:
       - ates
     environment:
+      - BROKER_HOST=broker
       - DEBUG=1
+      - PYTHONASYNCIODEBUG=1
+      - PYTHONUNBUFFERED=1
     depends_on:
       - broker
       - zookeeper
+    stop_signal: SIGHUP
   zookeeper:
     image: wurstmeister/zookeeper
     hostname: zookeeper
