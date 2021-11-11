@@ -31,7 +31,6 @@ def add_account(db: Session, account: BaseAccount):
 def add_task(db: Session, task: TaskBase):
     logger.info(f"Add task: {task}")
     task = ItemsModel(
-        account_id=task.account_id,
         title=task.title,
         description=task.description,
     )

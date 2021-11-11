@@ -71,7 +71,6 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print(payload)
         useremail: str = payload.get("sub")
         if useremail is None:
             raise credentials_exception
@@ -117,8 +116,6 @@ async def read_users_me(
         get_current_active_user,
     ),
 ):
-    print("hreeee")
-    print(request.cookies)
     return current_user
 
 

@@ -21,7 +21,6 @@ class Account(BaseAccount):
 
 
 class TaskBase(BaseModel):
-    account_id: int
     title: str
     description: str
 
@@ -31,6 +30,7 @@ class TaskBase(BaseModel):
 
 class Task(TaskBase):
     id: int
+    account_id: Optional[int]
     public_id: str
     created_at: datetime
     updated_at: Optional[datetime]

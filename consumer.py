@@ -1,9 +1,8 @@
 import asyncio
-from json import loads
 
 import aiojobs
+from json import loads
 from aiokafka import AIOKafkaConsumer
-from inventory.consumer_handler.performers import *
 from inventory.consumer_handler.handler import event_handler
 
 
@@ -58,6 +57,8 @@ async def consume_cud():
                 msg.value,
                 msg.timestamp,
             )
+            print("process event")
+            event_handler.process_event(msg.value)
     except asyncio.exceptions.CancelledError:
         print("CUD events consumer: Good bye!")
     finally:
@@ -75,9 +76,8 @@ async def main():
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
 
-    print("Run event consumers")
+    loop = asyncio.get_event_loop()
 
     try:
         scheduler = loop.run_until_complete(main())
