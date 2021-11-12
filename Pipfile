@@ -13,6 +13,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 sqlalchemy = "*"
 aiokafka = "*"
 aiojobs = "*"
+requests = "*"
 
 [dev-packages]
 

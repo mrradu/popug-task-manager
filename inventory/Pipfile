@@ -16,6 +16,8 @@ loguru = "*"
 kafka-python = "*"
 aiokafka = "*"
 aiojobs = "*"
+requests = "*"
+jinja2 = "*"
 
 [dev-packages]
 

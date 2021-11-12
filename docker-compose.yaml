@@ -38,6 +38,8 @@ services:
       bash -c "uvicorn inventory:app --reload --host 0.0.0.0 --port 8883"
     volumes:
       - ./:/inventory
+    networks:
+      - ates
     ports:
       - 8883:8883
     environment:
