@@ -8,11 +8,11 @@ from aiokafka import AIOKafkaConsumer
 from kafka.errors import KafkaConnectionError
 from loguru import logger
 
-from inventory.consumer_handler.performers import *
-from inventory.consumer_handler.handler import event_handler
+from frontoffice.consumer_handler.performers import *
+from frontoffice.consumer_handler.handler import event_handler
 
 
-def attach_consumer(topic: str, group_id: str = "inventory"):
+def attach_consumer(topic: str, group_id: str = "frontoffice"):
     def wrapper(f):
         async def wrapped(host: str, *args, port: int = 9092, **kwargs):
             consumer = AIOKafkaConsumer(

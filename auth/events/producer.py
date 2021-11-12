@@ -1,6 +1,6 @@
 import json
 
-from kafka import KafkaConsumer, KafkaProducer
+from kafka import KafkaProducer
 from loguru import logger
 
 

@@ -3,13 +3,14 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends, Form
 from fastapi.responses import HTMLResponse
 from loguru import logger
-from pydantic import BaseModel
 from starlette import status
 from starlette.responses import RedirectResponse
 
-from frontoffice.controller import get_user
+from frontoffice.controller import get_user, get_users
+from frontoffice.db import get_db
 from frontoffice.exeption import RequiresLoginException
 from frontoffice.gateway.auth import auth_gateway
+from frontoffice.popug_jwt import get_current_active_user, get_current_user
 from frontoffice.templates import templates
 
 router = APIRouter()
@@ -21,18 +22,20 @@ async def redirect() -> bool:
     raise RequiresLoginException
 
 
-async def get_current_user(request: Request):
+async def get_current_user2(request: Request, db=Depends(get_db)):
     try:
-        user = auth_gateway.check_auth_user(request.cookies)
-        # user = get_user(request.cookies) # TODO когда обрабатывать юзера в fo, то надо будет брать юзера из БД fo.
+        user = get_user(db, request.cookies["public_id"])
+        print(user)
     except Exception:
         raise RequiresLoginException()
     return user.dict()
 
 
 @router.get("/", response_class=HTMLResponse)
-async def check(request: Request, current_user=Depends(get_current_user)):
-    users = auth_gateway.get_users()
+async def check(
+    request: Request, current_user=Depends(get_current_active_user), db=Depends(get_db)
+):
+    users = get_users(db)
     return templates.TemplateResponse(
         "users.html",
         {
@@ -60,12 +63,24 @@ def sign_up_form(
 
 
 @router.get("/sign_in", response_class=HTMLResponse)
-def sign_up(request: Request):
-    try:
-        user = auth_gateway.check_auth_user(request.cookies)
+def sign_up(
+    request: Request,
+    current_user=Depends(get_current_user),
+):
+
+    if current_user:
         return RedirectResponse("/")
-    except:
-        return templates.TemplateResponse("sign_in.html", {"request": request})
+
+    return templates.TemplateResponse("sign_in.html", {"request": request})
+
+
+@router.get("/sign_out", response_class=HTMLResponse)
+def sign_out(
+    request: Request,
+):
+    response = RedirectResponse("/sign_in")
+    response.delete_cookie(key="Authorization")
+    return response
 
 
 @router.post("/sign_in", response_class=HTMLResponse)
@@ -75,9 +90,11 @@ def sign_up(
     email: str = Form(...),
     password: str = Form(...),
 ):
+    logger.info(f"{email}:{password}")
     auth_response = auth_gateway.auth_user(email=email, password=password)
 
     if auth_response.status_code == HTTPStatus.UNAUTHORIZED:
+        logger.info("UNAUTHORIZED")
         return templates.TemplateResponse(
             "sign_in.html",
             {"request": request, "error": True},
@@ -88,6 +105,7 @@ def sign_up(
     response.set_cookie(
         key="Authorization", value=f"Bearer {auth_response.json()['access_token']}"
     )
+    logger.warning(response.headers)
     return response
 
 

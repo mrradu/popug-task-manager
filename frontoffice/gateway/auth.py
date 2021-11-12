@@ -50,6 +50,7 @@ class AuthGateway:
             raise
 
     def auth_user(self, email, password):
+        logger.info("Send request to auth")
         response = requests.post(
             f"{self.AUTH_HOST}/auth/login",
             data={"username": email, "password": password},

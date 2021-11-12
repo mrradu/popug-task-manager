@@ -32,18 +32,21 @@
         <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
 
         <div class="form-floating">
-            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
-            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+            <label for="email">Email</label>
         </div>
         <div class="form-floating">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <label for="password">Пароль</label>
         </div>
         <div class="form-floating">
-            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="John Doe">
-            <label for="fullName">Full Name</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="John Doe" required>
+            <label for="fullName">Имя Фамилия</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary mt-5" type="submit">Sign up</button>
+        <button class="w-100 btn btn-lg btn-primary mt-5" type="submit">Регистрация</button>
+                <div class="mt-2">
+            <a href="/sign_in" class="alert-link">Войти</a>
+        </div>
     </form>
 </main>
 </body>

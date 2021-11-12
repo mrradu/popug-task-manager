@@ -15,6 +15,10 @@ sqlalchemy = "*"
 requests = "*"
 jinja2 = "*"
 loguru = "*"
+asyncio = "*"
+aiojobs = "*"
+aiokafka = "*"
+kafka = "*"
 
 [dev-packages]
 

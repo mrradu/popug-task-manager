@@ -4,8 +4,12 @@ from requests import Request
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse, Response
 
+from frontoffice import models
 from frontoffice.api import api_router
+from frontoffice.db import engine
 from frontoffice.exeption import RequiresLoginException
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
