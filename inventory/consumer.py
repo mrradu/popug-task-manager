@@ -45,7 +45,7 @@ def attach_consumer(topic: str, group_id: str = 'my-group'):
 async def consume_be(consumer: AIOKafkaConsumer):
     async for msg in consumer:
         logger.info(f"Consume event from topic `{msg.topic}`: {msg.value}")
-        # event_handler.process_event(Event(**msg.value))
+        event_handler.process_event(Event(**msg.value))
 
 
 @attach_consumer('accounts-stream')

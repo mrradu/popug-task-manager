@@ -1,5 +1,6 @@
+from inventory.enums import UserRole
 from loguru import logger
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, query
 
 from inventory.models import AccountsModel, ItemsModel
 from inventory.schemas import Account, BaseAccount, Task, TaskBase
@@ -19,6 +20,7 @@ def add_account(db: Session, account: BaseAccount):
         full_name=account.full_name,
         email=account.email,
         role=account.role,
+        is_active=True,
     )
     db.add(account)
     db.commit()
@@ -37,10 +39,19 @@ def add_task(db: Session, task: TaskBase):
     db.add(task)
     db.commit()
     db.refresh(task)
-    logger.info(f"task was added")
+    logger.info(f"task {task.title} was added")
 
     return task
 
 
-def get_tasks(db: Session):
-    return db.query(ItemsModel).all()
+def get_tasks(user: AccountsModel, db: Session):
+    query = db.query(ItemsModel)
+    if user.role in [UserRole.ADMIN, UserRole.MANAGER]:
+        query = query.filter(ItemsModel.account_id == user.id)
+
+    return [Task(task) for task in query.all()]
+
+
+def get_user_with_public_id(public_id: int, db: Session) -> AccountsModel:
+    """Получение данных пользователя по публичному идентификатору."""
+    return db.query(AccountsModel).filter(AccountsModel.public_id == public_id).one()
