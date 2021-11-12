@@ -6,7 +6,7 @@ from loguru import logger
 from starlette import status
 from starlette.responses import RedirectResponse
 
-from frontoffice.controller import get_user, get_users
+from frontoffice.controller import get_users
 from frontoffice.db import get_db
 from frontoffice.exeption import RequiresLoginException
 from frontoffice.gateway.auth import auth_gateway
@@ -22,17 +22,8 @@ async def redirect() -> bool:
     raise RequiresLoginException
 
 
-async def get_current_user2(request: Request, db=Depends(get_db)):
-    try:
-        user = get_user(db, request.cookies["public_id"])
-        print(user)
-    except Exception:
-        raise RequiresLoginException()
-    return user.dict()
-
-
 @router.get("/", response_class=HTMLResponse)
-async def check(
+async def index(
     request: Request, current_user=Depends(get_current_active_user), db=Depends(get_db)
 ):
     users = get_users(db)
@@ -63,11 +54,7 @@ def sign_up_form(
 
 
 @router.get("/sign_in", response_class=HTMLResponse)
-def sign_up(
-    request: Request,
-    current_user=Depends(get_current_user),
-):
-
+def sign_up(request: Request, current_user=Depends(get_current_user)):
     if current_user:
         return RedirectResponse("/")
 
@@ -75,9 +62,7 @@ def sign_up(
 
 
 @router.get("/sign_out", response_class=HTMLResponse)
-def sign_out(
-    request: Request,
-):
+def sign_out():
     response = RedirectResponse("/sign_in")
     response.delete_cookie(key="Authorization")
     return response

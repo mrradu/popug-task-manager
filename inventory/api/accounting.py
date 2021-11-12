@@ -13,6 +13,7 @@ router = APIRouter()
 
 from starlette.requests import Request
 
+
 class RequiresLoginException(Exception):
     pass
 
