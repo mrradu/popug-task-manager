@@ -3,6 +3,8 @@ from typing import Any, Dict
 
 from pydantic import BaseModel
 
+from frontoffice.service import Storage
+
 
 class Event(BaseModel):
     """Объект события."""

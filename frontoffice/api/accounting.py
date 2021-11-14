@@ -6,8 +6,7 @@ from loguru import logger
 from starlette import status
 from starlette.responses import RedirectResponse
 
-from frontoffice.controller import get_users
-from frontoffice.db import get_db
+from frontoffice.db import get_storage
 from frontoffice.exeption import RequiresLoginException
 from frontoffice.gateway.auth import auth_gateway
 from frontoffice.popug_jwt import get_current_active_user, get_current_user
@@ -24,14 +23,17 @@ async def redirect() -> bool:
 
 @router.get("/", response_class=HTMLResponse)
 async def index(
-    request: Request, current_user=Depends(get_current_active_user), db=Depends(get_db)
+    request: Request,
+    current_user=Depends(get_current_active_user),
+    storage=Depends(get_storage),
 ):
-    users = get_users(db)
+    users = storage.user.get_users()
+
     return templates.TemplateResponse(
         "users.html",
         {
             "request": request,
-            "users": users,
+            "users": [user.dict() for user in users],
             "current_user": current_user,
         },
     )
@@ -98,11 +100,20 @@ def sign_up(
 def update_user(
     user_id: str,
     request: Request,
+    storage=Depends(get_storage),
     current_user=Depends(get_current_user),
 ):
+    """Получение формы для обновления данных о юзере."""
+    mutable_user = storage.user.get_user(id=user_id)
+
     return templates.TemplateResponse(
         "edit_user.html",
-        {"request": request, "user_id": user_id, "current_user": current_user},
+        {
+            "request": request,
+            "user_id": user_id,
+            "current_user": current_user,
+            "mutable_user": mutable_user,
+        },
     )
 
 
@@ -110,14 +121,16 @@ def update_user(
 def update_user(
     user_id: str,
     request: Request,
+    storage=Depends(get_storage),
     current_user=Depends(get_current_user),
     role: str = Form(...),
     fullName: str = Form(...),
 ):
+    mutable_user = storage.user.get_user(id=user_id)
 
     auth_gateway.update_user(
         full_name=fullName,
-        user_id=user_id,
+        public_id=mutable_user.public_id,
         role=role,
     )
     return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)

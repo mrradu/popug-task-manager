@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from auth import models, schemas
 from auth.schemas import UserUpdateFields
-
 from auth.utils import get_password_hash
 
 
@@ -14,11 +13,11 @@ def get_user(db: Session, user_id: int) -> models.UserModel:
 
 def update_user(db: Session, user_fields: UserUpdateFields) -> models.UserModel:
     db.query(models.UserModel).filter(
-        models.UserModel.id == user_fields.user_id
+        models.UserModel.public_id == user_fields.public_id
     ).update(user_fields.dict(exclude_none=True, exclude={"user_id"}))
     db.commit()
 
-    return get_user(db=db, user_id=user_fields.user_id)
+    return get_user_by_public_id(db=db, public_id=user_fields.public_id)
 
 
 def get_user_by_email(db: Session, email: str):

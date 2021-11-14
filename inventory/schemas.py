@@ -14,10 +14,12 @@ class BaseAccount(BaseModel):
 
     class Config:
         orm_mode = True
+        use_enum_values = True
 
 
 class Account(BaseAccount):
     id: int
+    is_active: bool
 
 
 class TaskBase(BaseModel):
@@ -42,3 +44,12 @@ class Tasks(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AccountUpdateFields(BaseModel):
+    public_id: str
+    role: Optional[UserRole]
+    full_name: Optional[str]
+
+    class Config:
+        use_enum_values = True

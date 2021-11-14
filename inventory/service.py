@@ -1,9 +1,9 @@
-from inventory.enums import UserRole
 from loguru import logger
-from sqlalchemy.orm import Session, query
+from sqlalchemy.orm import Session
 
+from inventory.enums import UserRole
 from inventory.models import AccountsModel, ItemsModel
-from inventory.schemas import Account, BaseAccount, Task, TaskBase
+from inventory.schemas import BaseAccount, Task, TaskBase
 
 
 # def add_task(db: Session, task: Task):

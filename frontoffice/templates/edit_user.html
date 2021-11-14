@@ -8,10 +8,9 @@
 <div class="top-p mt-5">
     <form method="post">
         <h1 class="h3 mb-3 fw-normal">Edit account {{user_id}}</h1>
-<!--        <input style="display: none" type="text" class="form-control" id="userId" name="id" value="{{user_id}}">-->
         <div class="form-floating">
-            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="John Doe">
-            <label for="fullName">Full Name</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="John Doe" value="{{mutable_user.full_name}}">
+            <label for="fullName">Имя</label>
         </div>
         <div class="form-floating">
             <select class="form-select" name="role">

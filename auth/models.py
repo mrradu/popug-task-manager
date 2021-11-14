@@ -25,7 +25,7 @@ class UserModel(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     public_id = Column(String, default=generate_uuid)
     full_name = Column(String, nullable=False)
-    role = Column(Enum(UserRole), nullable=False, default=UserRole.EMPLOYEE)
+    role = Column(String, nullable=False, default=UserRole.EMPLOYEE.value)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)

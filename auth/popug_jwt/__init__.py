@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
 
-from auth.controller import get_user_by_public_id
+from auth.service import get_user_by_public_id
 from auth.db import get_db
 from auth.models import UserModel
 

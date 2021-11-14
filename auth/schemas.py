@@ -26,6 +26,9 @@ class User(UserBase):
 
 
 class UserUpdateFields(BaseModel):
-    user_id: int
+    public_id: str
     role: Optional[UserRole]
     full_name: Optional[str]
+
+    class Config:
+        use_enum_values = True

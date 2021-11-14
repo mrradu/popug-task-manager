@@ -11,5 +11,5 @@ class AccountsModel(Base):
     public_id = Column(String, nullable=False)
     full_name = Column(String, nullable=False)
     email = Column(String, nullable=False)
-    role = Column(Enum(UserRole), nullable=False, default=UserRole.EMPLOYEE)
+    role = Column(String, nullable=False, default=UserRole.EMPLOYEE)
     is_active = Column(Boolean, default=True)

@@ -1,6 +1,9 @@
+from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
+
+from inventory.service import Storage
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./inventory.db"
 
@@ -18,3 +21,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def get_storage() -> Storage:
+    db = get_db()
+    storage = Storage(next(db))
+    return storage

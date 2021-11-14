@@ -4,15 +4,12 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from jose import JWTError, jwt
-from loguru import logger
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
 from starlette import status
 from starlette.requests import Request
 
-from frontoffice.controller import get_user
-from frontoffice.db import get_db
+from frontoffice.db import get_storage
 from frontoffice.exeption import RequiresLoginException
 from frontoffice.models import AccountsModel
 
@@ -39,9 +36,7 @@ class TokenData(BaseModel):
 
 def get_request_token(request: Request):
     authorization: str = request.cookies.get("Authorization")
-    logger.info(authorization)
     scheme, token = get_authorization_scheme_param(authorization)
-    logger.info(token)
 
     if not authorization or scheme.lower() != "bearer":
         return None
@@ -50,7 +45,7 @@ def get_request_token(request: Request):
 
 def get_current_user(
     token: str = Depends(get_request_token),
-    db: Session = Depends(get_db),
+    storage=Depends(get_storage),
 ):
     if not token:
         return None
@@ -62,7 +57,6 @@ def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        logger.info(payload)
 
         public_id: str = payload.get("public_id")
 
@@ -74,8 +68,7 @@ def get_current_user(
         # raise credentials_exception
 
     token_data = TokenData(public_id=public_id)
-    user = get_user(db, public_id=token_data.public_id)
-    logger.info(user)
+    user = storage.user.get_user(public_id=token_data.public_id)
     if user is None:
         raise credentials_exception
     return user

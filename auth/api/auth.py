@@ -8,7 +8,7 @@ from jose import jwt
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 
-from auth.controller import get_user_by_email
+from auth.service import get_user_by_email
 from auth.db import get_db
 from auth.models import UserModel
 from auth.popug_jwt import (

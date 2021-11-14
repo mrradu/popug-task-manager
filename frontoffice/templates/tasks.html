@@ -6,9 +6,11 @@
 
 {% block content %}
 <div class="top-p mt-5">
+    {% if current_user.role == 'admin' %}
     <div>
         {% include 'add_task_form.html' %}
     </div>
+    {% endif %}
 
     <table class="table table-hover">
         <thead>

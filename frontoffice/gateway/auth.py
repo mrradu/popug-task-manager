@@ -24,13 +24,13 @@ class AuthGateway:
         )
         return response
 
-    def update_user(self, full_name, role, user_id):
+    def update_user(self, full_name, role, public_id):
         response = requests.post(
             f"{self.AUTH_HOST}/user/update",
             json={
                 "role": role,
                 "full_name": full_name,
-                "user_id": user_id,
+                "public_id": public_id,
             },
         )
         return response

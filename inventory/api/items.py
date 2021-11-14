@@ -1,15 +1,14 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 from loguru import logger
+from sqlalchemy.orm import Session
 from starlette.requests import Request
 
-from inventory import controller
-from inventory.db import get_db
-from inventory.schemas import Task, TaskBase, Tasks
-from inventory.auth import auth_gateway
+from inventory import service
 from inventory.api.accounting import get_current_user
+from inventory.db import get_db
+from inventory.schemas import Task, TaskBase
 
 router = APIRouter()
 
@@ -18,7 +17,7 @@ router = APIRouter()
 def add_task(task: TaskBase, db: Session = Depends(get_db)):
     """Создание таска."""
     logger.info(router)
-    task = controller.add_task(db=db, task=task)
+    task = service.add_task(db=db, task=task)
     return task
 
 
@@ -29,8 +28,6 @@ def get_tasks(
     current_user=Depends(get_current_user),
 ):
     """Получение списка тасок."""
-    user = controller.get_user_with_public_id(
-        public_id=current_user["public_id"], db=db
-    )
-    tasks = controller.get_tasks(user=user, db=db)
+    user = service.get_user_with_public_id(public_id=current_user["public_id"], db=db)
+    tasks = service.get_tasks(user=user, db=db)
     return tasks

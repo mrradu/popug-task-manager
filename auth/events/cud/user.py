@@ -9,7 +9,7 @@ def send_create_user_event(user: User):
         "data": {
             "public_id": user.public_id,
             "email": user.email,
-            "role": user.role.value,
+            "role": user.role,
             "full_name": user.full_name,
         },
     }
