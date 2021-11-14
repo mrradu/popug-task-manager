@@ -12,8 +12,12 @@ router = APIRouter()
 
 
 @router.get("/items", response_class=HTMLResponse)
-def get_items(request: Request, current_user=Depends(get_current_active_user)):
-    tasks = item_gateway.get_tasks(cookies=request.cookies)
+def get_items(
+    request: Request,
+    current_user=Depends(get_current_active_user),
+):
+    tasks = item_gateway.get_tasks(request.cookies)
+    print(tasks)
     return templates.TemplateResponse(
         "tasks.html", {"request": request, "tasks": tasks, "current_user": current_user}
     )

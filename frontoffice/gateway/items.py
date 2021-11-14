@@ -8,9 +8,13 @@ class ItemsGateway:
     def get_tasks(self, cookies):
         response = requests.post(
             f"{self.INVENTORY_HOST}/items/get",
-            headers=cookies,
+            cookies=cookies,
         )
-        return response
+        print("content", response.content)
+        try:
+            return response.json()
+        except Exception:
+            return []
 
     def add_tasks(self, task_title: str, task_description: str):
         logger.info(f"Create task {task_title}, with description {task_description}")
